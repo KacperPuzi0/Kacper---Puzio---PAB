@@ -48,7 +48,6 @@ app.put('/note/:id', function (req: Request, res: Response) {
   if(!note){
     res.status(404).send("Can't update")
   };
-  note.title = req.body.title;
   res.status(203).send(note)
 })
 
