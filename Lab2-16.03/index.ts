@@ -30,13 +30,13 @@ app.get('/note/:id', function (req: Request, res: Response) {
 
 app.post('/note', function (req: Request, res: Response) {
   console.log("Add me!")
-  const note = req.body;
-   console.log("title:", req.body.title); 
-   console.log("content:", req.body.content);
-   console.log("createDate:", req.body.createDate);
-   console.log("tags: ", req.body.tags);
-   console.log("id:", notes.length + 1);
-  
+  const note: Note = {
+      title: req.body.title,
+      content: req.body.content,
+      createDate: new Date().toISOString(),
+      tags: req.body.tags,
+      id: notes.length + 1,
+  };
   notes.push(note);
   res.status(201).send(note);
 })
@@ -46,8 +46,19 @@ app.put('/note/:id', function (req: Request, res: Response) {
   const note = notes.find(c=>c.id===parseInt(req.params.id));
   if(!note){
     res.status(404).send("Can't update")
+  }
+   else {
+    const newnote: Note = {
+      title: req.body.title,
+      content: req.body.content,
+      createDate: note.createDate ?? new Date().toISOString(),
+      tags: !req.body.tags ? note.tags : req.body.tags,
+      id: note.id,
+    };
+    const index = notes.indexOf(note);
+    notes[index] = newnote;
+    res.status(204).send("Updated");
   };
-  res.status(203).send(note)
 })
 
 app.delete('/note/:id', function (req: Request, res: Response) {
@@ -55,8 +66,12 @@ app.delete('/note/:id', function (req: Request, res: Response) {
   const note = notes.find(c=>c.id===parseInt(req.params.id));
   if(!note){
     res.status(404).send("Can't delete")
-  };
-  res.status(204).send(note)
+  }
+  else {
+    const index = notes.indexOf(note);
+    notes.splice(index, 1);
+    res.status(204).send("Deleted");
+  }
 })
 
 app.listen(3000)
