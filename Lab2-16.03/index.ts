@@ -29,15 +29,14 @@ app.get('/note/:id', function (req: Request, res: Response) {
 })
 
 app.post('/note', function (req: Request, res: Response) {
-  console.log("Add me!") 
-  const note = {
-    title: req.body.title,
-    content: req.body.content,
-    createDate: req.body.createDate,
-    tags:req.body.tags,
-    id: notes.length + 1
-  };
-  const title = req.body.title;
+  console.log("Add me!")
+  const note = req.body;
+   console.log("title:", req.body.title); 
+   console.log("content:", req.body.content);
+   console.log("createDate:", req.body.createDate);
+   console.log("tags: ", req.body.tags);
+   console.log("id:", notes.length + 1);
+  
   notes.push(note);
   res.status(201).send(note);
 })
